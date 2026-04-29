@@ -4,6 +4,8 @@
  */
 package consultorio;
 
+import vistas.Login;
+
 /**
  *
  * @author lajot
@@ -14,7 +16,8 @@ public class Consultorio {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+         Login vp = new Login();
+        vp.setVisible(true);
     }
     
 }
