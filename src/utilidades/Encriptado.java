@@ -20,14 +20,15 @@ import org.apache.commons.codec.binary.Base64;
  */
 public class Encriptado {
     
-     private static final String MILLAVE = "2026tareadam2026";
+     private static final String MILLAVE = "consultorio";
 
     
     public static String encriptar(String textoEncriptar) {
-
+        
+        String cadenaEncriptada = null;
+        
         try {
-            String cadenaEncriptada = null;
-            
+                  
             Key millaveEnBytes = new SecretKeySpec(MILLAVE.getBytes(), "AES");
             
             Cipher encriptador = Cipher.getInstance("AES");

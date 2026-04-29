@@ -45,15 +45,12 @@ public class Conexion {
 
     public static boolean acceder(String usuario, String contrasenya) {
 
+        String SQL = "SELECT usuario, pass FROM usuario WHERE usuario =? AND pass =?";
+        PreparedStatement pst;
+        ResultSet rs;     
+        
         try {
-            String consulta
-                    = "SELECT usuario, contrasenya "
-                    + "FROM usuarios WHERE usuario=? "
-                    + "AND contrasenya=?";
-
-            PreparedStatement pst;
-            ResultSet rs;              
-            pst = conn.prepareStatement(consulta);      
+            pst= Conexion.conn.prepareStatement(SQL); 
 
             pst.setString(1, usuario);
             pst.setString(2, contrasenya);

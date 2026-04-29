@@ -21,6 +21,8 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
     }
+    
+    public static String[]datosPersonal;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -134,7 +136,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_CampoUsuarioActionPerformed
 
     private void BotonEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEntrarActionPerformed
-     compruebaLogin();    // TODO add your handling code here:
+     entrar();    // TODO add your handling code here:
     }//GEN-LAST:event_BotonEntrarActionPerformed
 
     /**
@@ -172,26 +174,40 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
- public void compruebaLogin() {
+ public void entrar() {
         
         String user = CampoUsuario.getText();
-        String pass = CampoContraseña.getText();
+        String pass = new String (CampoContraseña.getPassword()).trim();
         
-        Conexion.Conectar();
-        
-        if (Conexion.acceder(user, pass)){
-            JOptionPane.showMessageDialog(this, "Logado correcto, Adelante");
-            MenuPrincipal v= new MenuPrincipal();
-            v.setVisible(true);
-            this.dispose();
+       
+        if (user.isEmpty()|| pass.isEmpty()){
             
-        }else {
-            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrecto. Inténtelo de nuevo");
+            JOptionPane.showMessageDialog(this,
+                    "Usuario o contraseña incorrectos. Inténtelo de nuevo.",
+                    "Error de acceso", JOptionPane.ERROR_MESSAGE);
             CampoUsuario.setText("");
             CampoContraseña.setText("");
-
-         
-                    
+            return;
         }
-    }
+        
+        if (Conexion.acceder(user, pass)) {
+            datosPersonal= Conexion.RescataDatosUserLogado(user);
+            MenuPrincipal menu= new MenuPrincipal();
+            this.setVisible(false);
+            menu.setVisible(true);
+            this.dispose();
+        }else{
+            JOptionPane.showMessageDialog(this,
+            "Usuario o contraseña incorrectos. Inténtelo de nuevo.",
+                    "Error de acceso", JOptionPane.ERROR_MESSAGE); 
+            CampoUsuario.setText("");
+            CampoContraseña.setText("");
+            
+        }
+ 
+     
+ 
+ 
+ }
+ 
 }
