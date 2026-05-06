@@ -5,6 +5,7 @@
 package modelo;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 /**
  *
@@ -12,130 +13,139 @@ import java.time.LocalDate;
  */
 public class Paciente {
     
-    public String  Dni;               
-    public String  Nombre;            
-    public String  Apellidos;         
-    public String  Email;             
-    public int     Cp;                
-    public char    Sexo;              
-    public LocalDate FechaNacimiento; 
-    public long    Telefono;          
-    public boolean Alcohol;           
-    public boolean Tabaco;            
-    public String  Familiares;        
-    public String  Personal;
+    private String dni;
+    private String nombre;
+    private String apellidos;
+    private Date   fechaNacimiento;
+    private int    telefono;
+    private String email;
+    private int    cp;
+    private String sexo;
+    private String tabaquismo;
+    private String consumoalcohol;
+    private String antecedentesSalud;
+    private String datosSaludGeneral;
+    private Date   fechaRegistro;
 
-    public Paciente(String Dni, String Nombre, String Apellidos, String Email, int Cp, char Sexo, LocalDate FechaNacimiento, long Telefono, boolean Alcohol, boolean Tabaco, String Familiares, String Personal) {
-        this.Dni = Dni;
-        this.Nombre = Nombre;
-        this.Apellidos = Apellidos;
-        this.Email = Email;
-        this.Cp = Cp;
-        this.Sexo = Sexo;
-        this.FechaNacimiento = FechaNacimiento;
-        this.Telefono = Telefono;
-        this.Alcohol = Alcohol;
-        this.Tabaco = Tabaco;
-        this.Familiares = Familiares;
-        this.Personal = Personal;
+    public Paciente(String dni, String nombre, String apellidos, Date fechaNacimiento, int telefono, String email, int cp, String sexo, String tabaquismo, String consumoalcohol, String antecedentesSalud, String datosSaludGeneral, Date fechaRegistro) {
+        this.dni = dni;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+        this.email = email;
+        this.cp = cp;
+        this.sexo = sexo;
+        this.tabaquismo = tabaquismo;
+        this.consumoalcohol = consumoalcohol;
+        this.antecedentesSalud = antecedentesSalud;
+        this.datosSaludGeneral = datosSaludGeneral;
+        this.fechaRegistro = fechaRegistro;
     }
 
     public String getDni() {
-        return Dni;
+        return dni;
     }
 
-    public void setDni(String Dni) {
-        this.Dni = Dni;
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getApellidos() {
-        return Apellidos;
+        return apellidos;
     }
 
-    public void setApellidos(String Apellidos) {
-        this.Apellidos = Apellidos;
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public int getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(int telefono) {
+        this.telefono = telefono;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
-    public void setEmail(String Email) {
-        this.Email = Email;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getCp() {
-        return Cp;
+        return cp;
     }
 
-    public void setCp(int Cp) {
-        this.Cp = Cp;
+    public void setCp(int cp) {
+        this.cp = cp;
     }
 
-    public char getSexo() {
-        return Sexo;
+    public String getSexo() {
+        return sexo;
     }
 
-    public void setSexo(char Sexo) {
-        this.Sexo = Sexo;
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
     }
 
-    public LocalDate getFechaNacimiento() {
-        return FechaNacimiento;
+    public String getTabaquismo() {
+        return tabaquismo;
     }
 
-    public void setFechaNacimiento(LocalDate FechaNacimiento) {
-        this.FechaNacimiento = FechaNacimiento;
+    public void setTabaquismo(String tabaquismo) {
+        this.tabaquismo = tabaquismo;
     }
 
-    public long getTelefono() {
-        return Telefono;
+    public String getConsumoalcohol() {
+        return consumoalcohol;
     }
 
-    public void setTelefono(long Telefono) {
-        this.Telefono = Telefono;
+    public void setConsumoalcohol(String consumoalcohol) {
+        this.consumoalcohol = consumoalcohol;
     }
 
-    public boolean isAlcohol() {
-        return Alcohol;
+    public String getAntecedentesSalud() {
+        return antecedentesSalud;
     }
 
-    public void setAlcohol(boolean Alcohol) {
-        this.Alcohol = Alcohol;
+    public void setAntecedentesSalud(String antecedentesSalud) {
+        this.antecedentesSalud = antecedentesSalud;
     }
 
-    public boolean isTabaco() {
-        return Tabaco;
+    public String getDatosSaludGeneral() {
+        return datosSaludGeneral;
     }
 
-    public void setTabaco(boolean Tabaco) {
-        this.Tabaco = Tabaco;
+    public void setDatosSaludGeneral(String datosSaludGeneral) {
+        this.datosSaludGeneral = datosSaludGeneral;
     }
 
-    public String getFamiliares() {
-        return Familiares;
+    public Date getFechaRegistro() {
+        return fechaRegistro;
     }
 
-    public void setFamiliares(String Familiares) {
-        this.Familiares = Familiares;
-    }
-
-    public String getPersonal() {
-        return Personal;
-    }
-
-    public void setPersonal(String Personal) {
-        this.Personal = Personal;
+    public void setFechaRegistro(Date fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 
     
-        
 }

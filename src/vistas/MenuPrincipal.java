@@ -4,6 +4,10 @@
  */
 package vistas;
 
+import bbdd.Conexion;
+import javax.swing.table.DefaultTableModel;
+import utilidades.Utilidades;
+
 /**
  *
  * @author lajot
@@ -17,8 +21,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
      */
     public MenuPrincipal() {
         initComponents();
+        setResizable(false);
+        Utilidades.centrarVentana(this);
+        configurarVentana();
     }
 
+    public static String[]datosPersonal;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,14 +39,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        L1 = new javax.swing.JLabel();
-        L2 = new javax.swing.JLabel();
-        L3 = new javax.swing.JLabel();
+        LabelFecha = new javax.swing.JLabel();
+        LabelFacultativo = new javax.swing.JLabel();
+        LabelColegiado = new javax.swing.JLabel();
         BotonPacientes = new javax.swing.JButton();
         BotonEnfermeria = new javax.swing.JButton();
         BotonPersonal = new javax.swing.JButton();
         BotonConsultas = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        LabelAgenda = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
@@ -51,12 +59,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logo_good.png"))); // NOI18N
 
-        L1.setText("jLabel9");
-
-        L2.setText("jLabel9");
-
-        L3.setText("jLabel9");
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -64,9 +66,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(L1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(L3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(L2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(LabelFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(LabelColegiado, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(LabelFacultativo, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(64, 64, 64))
@@ -75,36 +77,40 @@ public class MenuPrincipal extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 10, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(L1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(L2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(L3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(16, 16, 16)
+                .addComponent(LabelFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(LabelFacultativo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(LabelColegiado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(14, 14, 14))
         );
 
         BotonPacientes.setBackground(new java.awt.Color(51, 153, 255));
         BotonPacientes.setForeground(new java.awt.Color(255, 255, 255));
         BotonPacientes.setText("PACIENTES");
+        BotonPacientes.addActionListener(this::BotonPacientesActionPerformed);
 
         BotonEnfermeria.setBackground(new java.awt.Color(51, 153, 255));
         BotonEnfermeria.setForeground(new java.awt.Color(255, 255, 255));
         BotonEnfermeria.setText("ENFERMERIA");
+        BotonEnfermeria.addActionListener(this::BotonEnfermeriaActionPerformed);
 
         BotonPersonal.setBackground(new java.awt.Color(51, 153, 255));
         BotonPersonal.setForeground(new java.awt.Color(255, 255, 255));
         BotonPersonal.setText("PERSONAL MÉDICO");
+        BotonPersonal.addActionListener(this::BotonPersonalActionPerformed);
 
         BotonConsultas.setBackground(new java.awt.Color(51, 153, 255));
         BotonConsultas.setForeground(new java.awt.Color(255, 255, 255));
         BotonConsultas.setText("CONSULTAS");
+        BotonConsultas.addActionListener(this::BotonConsultasActionPerformed);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("AGENDA DE CITAS MÉDICAS");
+        LabelAgenda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        LabelAgenda.setForeground(new java.awt.Color(255, 255, 255));
+        LabelAgenda.setText("AGENDA DE CITAS MÉDICAS");
 
         Tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -136,7 +142,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                             .addComponent(BotonConsultas, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(47, 47, 47)
                             .addComponent(BotonPacientes, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel1))
+                    .addComponent(LabelAgenda))
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(44, 44, 44)
@@ -147,7 +153,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(174, 174, 174))))
+                        .addGap(171, 171, 171))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,13 +168,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(73, 73, 73)
-                        .addComponent(jLabel1)
+                        .addComponent(LabelAgenda)
                         .addGap(32, 32, 32)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
+                        .addGap(55, 55, 55)
                         .addComponent(jLabel2)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -183,7 +189,24 @@ public class MenuPrincipal extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BotonConsultasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonConsultasActionPerformed
+        new NuevaConsultaMedica(this, true).setVisible(true);
+    }//GEN-LAST:event_BotonConsultasActionPerformed
+
+    private void BotonPacientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonPacientesActionPerformed
+        new Pacientes(this, true).setVisible(true); // TODO add your handling code here:
+    }//GEN-LAST:event_BotonPacientesActionPerformed
+
+    private void BotonEnfermeriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEnfermeriaActionPerformed
+        new NuevaConsultaEnfermeria(this, true).setVisible(true); // TODO add your handling code here:
+    }//GEN-LAST:event_BotonEnfermeriaActionPerformed
+
+    private void BotonPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonPersonalActionPerformed
+        new PersonalMedico(this, true).setVisible(true);  // TODO add your handling code here:
+    }//GEN-LAST:event_BotonPersonalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -215,11 +238,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton BotonEnfermeria;
     private javax.swing.JButton BotonPacientes;
     private javax.swing.JButton BotonPersonal;
-    private javax.swing.JLabel L1;
-    private javax.swing.JLabel L2;
-    private javax.swing.JLabel L3;
+    private javax.swing.JLabel LabelAgenda;
+    private javax.swing.JLabel LabelColegiado;
+    private javax.swing.JLabel LabelFacultativo;
+    private javax.swing.JLabel LabelFecha;
     private javax.swing.JTable Tabla;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel2;
@@ -227,5 +250,72 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
+    
+    private void configurarVentana() {
+        configurarLabels();
+        configurarBotones();
+        configurarTabla();
+    }
 
+
+    // ── Labels de cabecera según rol ────────────────────────────────
+    private void configurarLabels() {
+        java.time.LocalDate hoy = java.time.LocalDate.now();
+        java.time.format.DateTimeFormatter f =
+            java.time.format.DateTimeFormatter.ofPattern(
+                "dd-MMMM-yyyy", new java.util.Locale("es", "ES"));
+        LabelFecha.setText(hoy.format(f));
+
+        String tipo = Conexion.datosPersonal[2].toUpperCase();
+        if (tipo.equals("MEDICO") || tipo.equals("ENFERMERIA")) {
+            LabelFacultativo.setText("Facultativo: " + Conexion.datosPersonal[0]);
+            LabelColegiado.setText("Nº de Colegiado: " + Conexion.datosPersonal[1]);
+        } else {
+            LabelFacultativo.setText("Administrador: " + Conexion.datosPersonal[0]);
+            LabelColegiado.setText("");
+        }
+    }
+
+    // ── Botones activos según rol ───────────────────────────────────
+    private void configurarBotones() {
+        BotonConsultas.setEnabled(false);
+        BotonPacientes.setEnabled(false);
+        BotonEnfermeria.setEnabled(false);
+        BotonPersonal.setEnabled(false);
+
+        switch (Conexion.datosPersonal[2].toUpperCase()) {
+            case "MEDICO":
+                BotonConsultas.setEnabled(true);
+                BotonPacientes.setEnabled(true);
+                break;
+            case "ENFERMERIA":
+                BotonEnfermeria.setEnabled(true);
+                break;
+            case "ADMIN":
+                BotonPersonal.setEnabled(true);
+                break;
+        }
+    }
+
+    // ── Tabla agenda según rol ──────────────────────────────────────
+    private void configurarTabla() {
+        String tipo = Conexion.datosPersonal[2].toUpperCase();
+        DefaultTableModel modelo = new DefaultTableModel(
+            new String[]{"NOMBRE", "DIA", "HORA"}, 0) {
+            public boolean isCellEditable(int r, int c) { return false; }
+        };
+
+        if (tipo.equals("MEDICO")) {
+            LabelAgenda.setText("AGENDA DE CITAS MÉDICAS");
+            Conexion.recuperaCitasMedicas(modelo);
+            Tabla.setModel(modelo);
+        } else if (tipo.equals("ENFERMERIA")) {
+            LabelAgenda.setText("AGENDA ENFERMERÍA");
+            Conexion.recuperaCitasEnfermeria(modelo);
+            Tabla.setModel(modelo);
+        } else {
+            LabelAgenda.setVisible(false);
+            Tabla.setVisible(false);
+        }
+    }
 }

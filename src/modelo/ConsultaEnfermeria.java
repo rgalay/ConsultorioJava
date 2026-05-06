@@ -10,21 +10,23 @@ import java.util.Date;
  *
  * @author lajot
  */
-public class Consulta {
-
+public class ConsultaEnfermeria {
+    
     private String dniPaciente;
     private Date   fechaConsulta;
-    private String diagnostico;
-    private String tratamiento;
-    private String observaciones;
+    private double maxima;
+    private double minima;
+    private int    glucosa;
+    private double peso;
     private int    codigoFacultativo;
 
-    public Consulta(String dniPaciente, Date fechaConsulta, String diagnostico, String tratamiento, String observaciones, int codigoFacultativo) {
+    public ConsultaEnfermeria(String dniPaciente, Date fechaConsulta, double maxima, double minima, int glucosa, double peso, int codigoFacultativo) {
         this.dniPaciente = dniPaciente;
         this.fechaConsulta = fechaConsulta;
-        this.diagnostico = diagnostico;
-        this.tratamiento = tratamiento;
-        this.observaciones = observaciones;
+        this.maxima = maxima;
+        this.minima = minima;
+        this.glucosa = glucosa;
+        this.peso = peso;
         this.codigoFacultativo = codigoFacultativo;
     }
 
@@ -44,28 +46,36 @@ public class Consulta {
         this.fechaConsulta = fechaConsulta;
     }
 
-    public String getDiagnostico() {
-        return diagnostico;
+    public double getMaxima() {
+        return maxima;
     }
 
-    public void setDiagnostico(String diagnostico) {
-        this.diagnostico = diagnostico;
+    public void setMaxima(double maxima) {
+        this.maxima = maxima;
     }
 
-    public String getTratamiento() {
-        return tratamiento;
+    public double getMinima() {
+        return minima;
     }
 
-    public void setTratamiento(String tratamiento) {
-        this.tratamiento = tratamiento;
+    public void setMinima(double minima) {
+        this.minima = minima;
     }
 
-    public String getObservaciones() {
-        return observaciones;
+    public int getGlucosa() {
+        return glucosa;
     }
 
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
+    public void setGlucosa(int glucosa) {
+        this.glucosa = glucosa;
+    }
+
+    public double getPeso() {
+        return peso;
+    }
+
+    public void setPeso(double peso) {
+        this.peso = peso;
     }
 
     public int getCodigoFacultativo() {

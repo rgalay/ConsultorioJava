@@ -6,6 +6,7 @@ package vistas;
 
 import bbdd.Conexion;
 import javax.swing.JOptionPane;
+import utilidades.Utilidades;
 
 /**
  *
@@ -20,6 +21,8 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        setResizable(false);
+        Utilidades.centrarVentana(this);
     }
     
     public static String[]datosPersonal;
@@ -43,8 +46,11 @@ public class Login extends javax.swing.JFrame {
         CampoContraseña = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 204, 204));
+        jPanel1.setMaximumSize(new java.awt.Dimension(755, 450));
+        jPanel1.setMinimumSize(new java.awt.Dimension(755, 450));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/hospitalLogin.png"))); // NOI18N
 
@@ -132,7 +138,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CampoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CampoUsuarioActionPerformed
-        // TODO add your handling code here:
+      entrar();  // TODO add your handling code here:
     }//GEN-LAST:event_CampoUsuarioActionPerformed
 
     private void BotonEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEntrarActionPerformed
@@ -174,40 +180,31 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
- public void entrar() {
-        
-        String user = CampoUsuario.getText();
-        String pass = new String (CampoContraseña.getPassword()).trim();
-        
-       
-        if (user.isEmpty()|| pass.isEmpty()){
-            
-            JOptionPane.showMessageDialog(this,
-                    "Usuario o contraseña incorrectos. Inténtelo de nuevo.",
-                    "Error de acceso", JOptionPane.ERROR_MESSAGE);
+ 
+    private void entrar() {
+        String user = CampoUsuario.getText().trim();
+        String pass = new String(CampoContraseña.getPassword()).trim();
+
+        if (user.isEmpty() || pass.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Usuario o contraseña erróneos. Inténtelo de nuevo.");
             CampoUsuario.setText("");
             CampoContraseña.setText("");
             return;
         }
-        
+
         if (Conexion.acceder(user, pass)) {
-            datosPersonal= Conexion.RescataDatosUserLogado(user);
-            MenuPrincipal menu= new MenuPrincipal();
-            this.setVisible(false);
-            menu.setVisible(true);
+            Conexion.datosPersonal = Conexion.recuperaDatosUserLogado(user);
+            new MenuPrincipal().setVisible(true);
             this.dispose();
-        }else{
-            JOptionPane.showMessageDialog(this,
-            "Usuario o contraseña incorrectos. Inténtelo de nuevo.",
-                    "Error de acceso", JOptionPane.ERROR_MESSAGE); 
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Usuario o contraseña erróneos. Inténtelo de nuevo.");
             CampoUsuario.setText("");
             CampoContraseña.setText("");
-            
         }
- 
-     
- 
- 
- }
- 
+    }
+   
 }
+ 
+

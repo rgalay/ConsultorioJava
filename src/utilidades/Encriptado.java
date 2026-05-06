@@ -23,12 +23,11 @@ public class Encriptado {
      private static final String MILLAVE = "consultorio";
 
     
-    public static String encriptar(String textoEncriptar) {
-        
-        String cadenaEncriptada = null;
-        
+    public static String Encriptar(String textoEncriptar) {
+
         try {
-                  
+            String cadenaEncriptada = null;
+            
             Key millaveEnBytes = new SecretKeySpec(MILLAVE.getBytes(), "AES");
             
             Cipher encriptador = Cipher.getInstance("AES");
@@ -47,7 +46,7 @@ public class Encriptado {
         
     }
 
-    public static String desencriptar(String textoDesencriptar) {
+    public static String Desencriptar(String textoDesencriptar) {
 
         try {
             String cadenadesencriptada = null;
@@ -71,5 +70,7 @@ public class Encriptado {
         }
         return null;
     }
+
+    
     
 }

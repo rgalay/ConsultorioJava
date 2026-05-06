@@ -4,6 +4,11 @@
  */
 package vistas;
 
+import bbdd.Conexion;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import utilidades.Utilidades;
+
 /**
  *
  * @author lajot
@@ -18,6 +23,11 @@ public class Pacientes extends javax.swing.JDialog {
     public Pacientes(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setResizable(false);
+        Utilidades.centrarVentana(this);
+        Conexion.cargasComboCp(ComboCp);
+        cargarTablaPacientes();
+        desactivarFormulario();
     }
 
     /**
@@ -39,11 +49,11 @@ public class Pacientes extends javax.swing.JDialog {
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        CampoNombre = new javax.swing.JTextField();
+        CampoDni = new javax.swing.JTextField();
+        CampoTelefono = new javax.swing.JTextField();
+        CampoApellidos = new javax.swing.JTextField();
+        ComboCp = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
         jLabel15 = new javax.swing.JLabel();
@@ -101,7 +111,7 @@ public class Pacientes extends javax.swing.JDialog {
         jLabel19.setForeground(new java.awt.Color(255, 255, 255));
         jLabel19.setText("CP");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        ComboCp.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -117,11 +127,11 @@ public class Pacientes extends javax.swing.JDialog {
                     .addComponent(jLabel19))
                 .addGap(53, 53, 53)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField1)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(CampoNombre)
+                    .addComponent(CampoApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                    .addComponent(CampoTelefono, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                    .addComponent(CampoDni, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)
+                    .addComponent(ComboCp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(92, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -130,22 +140,22 @@ public class Pacientes extends javax.swing.JDialog {
                 .addGap(31, 31, 31)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(CampoDni, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CampoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16))
                 .addGap(22, 22, 22)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(CampoApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CampoTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel18))
                 .addGap(23, 23, 23)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ComboCp, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel19))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
@@ -267,8 +277,12 @@ public class Pacientes extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonActualizar;
+    private javax.swing.JTextField CampoApellidos;
+    private javax.swing.JTextField CampoDni;
+    private javax.swing.JTextField CampoNombre;
+    private javax.swing.JTextField CampoTelefono;
+    private javax.swing.JComboBox<String> ComboCp;
     private javax.swing.JTable Tabla;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -281,9 +295,87 @@ public class Pacientes extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
+
+    private void cargarTablaPacientes() {
+        DefaultTableModel modelo = new DefaultTableModel(
+            new String[]{"DNI","NOMBRE","APELLIDOS","TELÉFONO","CP"}, 0) {
+            public boolean isCellEditable(int r, int c) { return false; }
+        };
+        Conexion.cargaTablaPacientes(modelo);
+        Tabla.setModel(modelo);
+
+        Tabla.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && Tabla.getSelectedRow() >= 0) {
+                int fila = Tabla.getSelectedRow();
+                CampoDni.setText(Tabla.getValueAt(fila, 0).toString());
+                CampoNombre.setText(Tabla.getValueAt(fila, 1).toString());
+                CampoApellidos.setText(Tabla.getValueAt(fila, 2).toString());
+                CampoTelefono.setText(Tabla.getValueAt(fila, 3).toString());
+
+                int cp = Integer.parseInt(Tabla.getValueAt(fila, 4).toString());
+                for (int i = 0; i < ComboCp.getItemCount(); i++) {
+                    if (String.valueOf(ComboCp.getItemAt(i))
+                            .equals(String.valueOf(cp))) {
+                        ComboCp.setSelectedIndex(i);
+                        break;
+                    }
+                }
+                activarFormulario();
+            }
+        });
+    }
+
+    private void activarFormulario() {
+        CampoNombre.setEnabled(true);
+        CampoApellidos.setEnabled(true);
+        CampoTelefono.setEnabled(true);
+        ComboCp.setEnabled(true);
+        BotonActualizar.setEnabled(true);
+    }
+
+    private void desactivarFormulario() {
+        CampoDni.setEnabled(false);
+        CampoNombre.setEnabled(false);
+        CampoApellidos.setEnabled(false);
+        CampoTelefono.setEnabled(false);
+        ComboCp.setEnabled(false);
+        BotonActualizar.setEnabled(false);
+        CampoDni.setText("");
+        CampoNombre.setText("");
+        CampoApellidos.setText("");
+        CampoTelefono.setText("");
+    }
+
+    private void BotonActualizarActionPerformed(java.awt.event.ActionEvent evt) {
+        if (CampoNombre.getText().trim().isEmpty()
+                || CampoApellidos.getText().trim().isEmpty()
+                || CampoTelefono.getText().trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Todos los campos son obligatorios."); return;
+        }
+
+        ArrayList<String> datos = new ArrayList<>();
+        datos.add(CampoDni.getText().trim());
+        datos.add(CampoNombre.getText().trim());
+        datos.add(CampoApellidos.getText().trim());
+        datos.add(CampoTelefono.getText().trim());
+        datos.add(ComboCp.getSelectedItem().toString());
+
+        if (Conexion.actualizarPaciente(datos)) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Datos del paciente actualizados correctamente");
+            DefaultTableModel modelo = new DefaultTableModel(
+                new String[]{"DNI","NOMBRE","APELLIDOS","TELÉFONO","CP"}, 0) {
+                public boolean isCellEditable(int r, int c) { return false; }
+            };
+            Conexion.cargaTablaPacientes(modelo);
+            Tabla.setModel(modelo);
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Error en la actualización del paciente. Inténtelo más tarde o "
+                + "póngase en contacto con el administrador del sistema.");
+        }
+        desactivarFormulario();
+    }
 }

@@ -6,58 +6,57 @@ package modelo;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 
 /**
  *
  * @author lajot
  */
 public class Cita {
-    
-    String    Dni;    
-    String    Nombre; 
-    LocalDate Fecha;  
-    LocalTime Hora;  
 
-    public Cita(String Dni, String Nombre, LocalDate Fecha, LocalTime Hora) {
-        this.Dni = Dni;
-        this.Nombre = Nombre;
-        this.Fecha = Fecha;
-        this.Hora = Hora;
+    private String dniPaciente;
+    private String nombre;
+    private Date   dia;
+    private double hora;
+
+    public Cita(String dniPaciente, String nombre, Date dia, double hora) {
+        this.dniPaciente = dniPaciente;
+        this.nombre = nombre;
+        this.dia = dia;
+        this.hora = hora;
     }
 
-    public String getDni() {
-        return Dni;
+    public String getDniPaciente() {
+        return dniPaciente;
     }
 
-    public void setDni(String Dni) {
-        this.Dni = Dni;
+    public void setDniPaciente(String dniPaciente) {
+        this.dniPaciente = dniPaciente;
     }
 
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public LocalDate getFecha() {
-        return Fecha;
+    public Date getDia() {
+        return dia;
     }
 
-    public void setFecha(LocalDate Fecha) {
-        this.Fecha = Fecha;
+    public void setDia(Date dia) {
+        this.dia = dia;
     }
 
-    public LocalTime getHora() {
-        return Hora;
+    public double getHora() {
+        return hora;
     }
 
-    public void setHora(LocalTime Hora) {
-        this.Hora = Hora;
+    public void setHora(double hora) {
+        this.hora = hora;
     }
 
-   
-    
     
 }

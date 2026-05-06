@@ -4,6 +4,10 @@
  */
 package vistas;
 
+import bbdd.Conexion;
+import modelo.ConsultaEnfermeria;
+import utilidades.Utilidades;
+
 /**
  *
  * @author lajot
@@ -12,12 +16,18 @@ public class NuevoInformeEnfermeria extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NuevoInformeEnfermeria.class.getName());
 
+    private String dni;
     /**
      * Creates new form Enfermeria
      */
     public NuevoInformeEnfermeria(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setResizable(false);
+        Utilidades.centrarVentana(this);
+        this.dni = dni;
+        CampoDni.setText(dni);
+        CampoDni.setEditable(false);
     }
 
     /**
@@ -46,8 +56,8 @@ public class NuevoInformeEnfermeria extends javax.swing.JDialog {
         jPanel7 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         CampoGlucosa = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        BotonGuardar = new javax.swing.JButton();
+        BotonCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -190,13 +200,14 @@ public class NuevoInformeEnfermeria extends javax.swing.JDialog {
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
-        jButton1.setBackground(new java.awt.Color(0, 102, 102));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Guardar");
+        BotonGuardar.setBackground(new java.awt.Color(0, 102, 102));
+        BotonGuardar.setForeground(new java.awt.Color(255, 255, 255));
+        BotonGuardar.setText("Guardar");
 
-        jButton2.setBackground(new java.awt.Color(0, 102, 102));
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Cancelar");
+        BotonCancelar.setBackground(new java.awt.Color(0, 102, 102));
+        BotonCancelar.setForeground(new java.awt.Color(255, 255, 255));
+        BotonCancelar.setText("Cancelar");
+        BotonCancelar.addActionListener(this::BotonCancelarActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -217,9 +228,9 @@ public class NuevoInformeEnfermeria extends javax.swing.JDialog {
                             .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(158, 158, 158)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(BotonGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(41, 41, 41)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(BotonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -238,8 +249,8 @@ public class NuevoInformeEnfermeria extends javax.swing.JDialog {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(BotonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BotonGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29))
         );
 
@@ -256,6 +267,10 @@ public class NuevoInformeEnfermeria extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BotonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCancelarActionPerformed
+       this.dispose(); // TODO add your handling code here:
+    }//GEN-LAST:event_BotonCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -295,13 +310,13 @@ public class NuevoInformeEnfermeria extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BotonCancelar;
+    private javax.swing.JButton BotonGuardar;
     private javax.swing.JTextField CampoDni;
     private javax.swing.JTextField CampoGlucosa;
     private javax.swing.JTextField CampoMaxima;
     private javax.swing.JTextField CampoMinima;
     private javax.swing.JTextField CampoPeso;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -315,4 +330,32 @@ public class NuevoInformeEnfermeria extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     // End of variables declaration//GEN-END:variables
+
+private void BotonGuardar(java.awt.event.ActionEvent evt) {
+        try {
+            double maxima  = Double.parseDouble(CampoMaxima.getText().trim());
+            double minima  = Double.parseDouble(CampoMinima.getText().trim());
+            int    glucosa = Integer.parseInt(CampoGlucosa.getText().trim());
+            double peso    = Double.parseDouble(CampoPeso.getText().trim());
+            int colegiado  = Integer.parseInt(Conexion.datosPersonal[1]);
+
+            ConsultaEnfermeria ce = new ConsultaEnfermeria(
+                dni, new java.util.Date(),
+                maxima, minima, glucosa, peso, colegiado);
+
+            if (Conexion.registrarConsultaEnfermeria(ce)) {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                    "Registro realizado correctamente");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                    "Error en la acción de registro. Inténtelo más tarde o "
+                    + "póngase en contacto con el administrador del sistema.");
+            }
+            this.dispose();
+
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Todos los campos son obligatorios y deben ser numéricos.");
+        }
+    }
 }

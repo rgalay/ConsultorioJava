@@ -4,6 +4,13 @@
  */
 package vistas;
 
+import bbdd.Conexion;
+import java.awt.Frame;
+import modelo.Cita;
+import modelo.Paciente;
+import utilidades.UtilidadesEmail;
+import utilidades.Utilidades;
+
 /**
  *
  * @author lajot
@@ -15,10 +22,11 @@ public class NuevaCitaEnfermeria extends javax.swing.JDialog {
     /**
      * Creates new form NuevaCitaEnfermeria
      */
-    public NuevaCitaEnfermeria(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-    }
+    
+    private String dni;
+    private String nombre;
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -41,7 +49,8 @@ public class NuevaCitaEnfermeria extends javax.swing.JDialog {
         CampoDni = new javax.swing.JTextField();
         BotonRegistrar = new javax.swing.JButton();
         ComboFecha = new javax.swing.JComboBox<>();
-        CampoHora = new javax.swing.JTextField();
+        ComboHora = new javax.swing.JTextField();
+        jCalendar1 = new com.toedter.calendar.JCalendar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -105,21 +114,23 @@ public class NuevaCitaEnfermeria extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(95, 95, 95)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(47, 47, 47)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(CampoDni, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(CampoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ComboFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(CampoHora, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ComboHora, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CampoDni, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(79, 79, 79))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(198, 198, 198)
+                .addGap(194, 194, 194)
                 .addComponent(BotonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -127,25 +138,29 @@ public class NuevaCitaEnfermeria extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(57, 57, 57)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(CampoDni, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
+                    .addComponent(CampoDni, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(CampoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
+                    .addComponent(CampoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(ComboFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel6)
-                    .addComponent(CampoHora, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                    .addComponent(ComboFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
+                .addComponent(jCalendar1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(ComboHora, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(BotonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33))
+                .addContainerGap(22, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addGap(168, 168, 168))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -162,7 +177,7 @@ public class NuevaCitaEnfermeria extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
+     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -202,9 +217,10 @@ public class NuevaCitaEnfermeria extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonRegistrar;
     private javax.swing.JTextField CampoDni;
-    private javax.swing.JTextField CampoHora;
     private javax.swing.JTextField CampoNombre;
     private javax.swing.JComboBox<String> ComboFecha;
+    private javax.swing.JTextField ComboHora;
+    private com.toedter.calendar.JCalendar jCalendar1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -214,4 +230,63 @@ public class NuevaCitaEnfermeria extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
+
+    public NuevaCitaEnfermeria(java.awt.Frame parent, boolean modal,
+                                String dni, String nombre) {
+        super(parent, modal);
+        initComponents();
+        setResizable(false);
+        Utilidades.centrarVentana(this);
+        this.dni    = dni;
+        this.nombre = nombre;
+        CampoDni.setText(dni);
+        CampoDni.setEditable(false);
+        CampoNombre.setText(nombre);
+        CampoNombre.setEditable(false);
+
+        // Combo fecha enfermería
+        ComboFecha.removeAllItems();
+        ComboFecha.addItem("Seleccione");
+        ComboFecha.addItem("Una semana");
+        ComboFecha.addItem("Dos semanas");
+        ComboFecha.addItem("Un mes");
+    }
+    
+    private void BotonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {
+        if (ComboFecha.getSelectedIndex() == 0) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Selecciona un plazo."); return;
+        }
+        if (ComboHora.getText().trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Introduce una hora."); return;
+        }
+
+        java.time.LocalDate fecha;
+        switch (ComboFecha.getSelectedIndex()) {
+            case 1:  fecha = java.time.LocalDate.now().plusDays(7);  break;
+            case 2:  fecha = java.time.LocalDate.now().plusDays(14); break;
+            default: fecha = java.time.LocalDate.now().plusDays(30); break;
+        }
+
+        java.util.Date dia = java.util.Date.from(
+            fecha.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant());
+        double hora = Double.parseDouble(ComboHora.getText().trim());
+
+        Cita cita = new Cita(dni, nombre, dia, hora);
+
+        if (Conexion.registrarCitaEnfermeria(cita)) {
+            Paciente p = Conexion.recuperaDatosPaciente(dni);
+            if (p != null) {
+                UtilidadesEmail.enviarCorreoCita(
+                    p.getEmail(), dni, nombre, fecha.toString(), hora);
+            }
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Cita registrada correctamente.");
+            this.dispose();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Error al registrar la cita. Inténtelo más tarde.");
+        }
+    }
 }

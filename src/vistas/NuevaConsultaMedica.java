@@ -4,6 +4,11 @@
  */
 package vistas;
 
+import bbdd.Conexion;
+import modelo.Paciente;
+import javax.swing.table.DefaultTableModel;
+import utilidades.Utilidades;
+
 /**
  *
  * @author lajot
@@ -12,12 +17,15 @@ public class NuevaConsultaMedica extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NuevaConsultaMedica.class.getName());
 
+    private String dniActual = "";
     /**
      * Creates new form NuevaConsultaMedica
      */
     public NuevaConsultaMedica(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        Utilidades.centrarVentana(this);
+        
     }
 
     /**
@@ -53,6 +61,7 @@ public class NuevaConsultaMedica extends javax.swing.JDialog {
         BotonActualizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 204, 204));
 
@@ -135,8 +144,10 @@ public class NuevaConsultaMedica extends javax.swing.JDialog {
         jLabel8.setText("Teléfono");
 
         BotonNuevoInforme.setText("Nuevo Informe");
+        BotonNuevoInforme.addActionListener(this::BotonNuevoInformeActionPerformed);
 
         BotonNuevaCita.setText("Nueva Cita");
+        BotonNuevaCita.addActionListener(this::BotonNuevaCitaActionPerformed);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -193,6 +204,7 @@ public class NuevaConsultaMedica extends javax.swing.JDialog {
         BotonBuscarPaciente.setText("BUSCAR PACIENTE");
 
         BotonActualizar.setText("ATCUALIZAR TABLA");
+        BotonActualizar.addActionListener(this::BotonActualizarActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -253,6 +265,27 @@ public class NuevaConsultaMedica extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BotonNuevoInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonNuevoInformeActionPerformed
+      if (dniActual.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Primero busca un paciente.");
+            return;
+        }
+        new NuevoInformeMedico((java.awt.Frame) this.getParent(), true, dniActual)
+            .setVisible(true);
+    }
+  // TODO add your handling code here:
+    }//GEN-LAST:event_BotonNuevoInformeActionPerformed
+
+    private void BotonNuevaCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonNuevaCitaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BotonNuevaCitaActionPerformed
+
+    private void BotonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonActualizarActionPerformed
+      if (!dniActual.isEmpty()) cargarHistorial(dniActual);
+      // TODO add your handling code here:
+    }//GEN-LAST:event_BotonActualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -315,4 +348,64 @@ public class NuevaConsultaMedica extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
-}
+
+
+    // ── Buscar paciente por DNI ─────────────────────────────────────
+    private void BotonBuscarPacienteActionPerformed(java.awt.event.ActionEvent evt) {
+        String dni = CampoDni.getText().trim().toUpperCase();
+
+        if (!utilidades.Utilidades.validarDNI(dni)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "DNI no válido.");
+            return;
+        }
+
+        if (Conexion.compruebaDni(dni)) {
+            Paciente p = Conexion.recuperaDatosPaciente(dni);
+            CampoNombre.setText(p.getNombre());
+            CampoApellidos.setText(p.getApellidos());
+            CampoTeléfono.setText(String.valueOf(p.getTelefono()));
+            CampoEmail.setText(p.getEmail());
+            dniActual = dni;
+            cargarHistorial(dni);
+        } else {
+            int op = javax.swing.JOptionPane.showConfirmDialog(this,
+                    "No existe paciente con ese DNI. ¿Desea registrarlo?",
+                    "Paciente no encontrado",
+                    javax.swing.JOptionPane.YES_NO_OPTION);
+            if (op == javax.swing.JOptionPane.YES_OPTION) {
+                new NuevoPaciente((java.awt.Frame) this.getParent(), true, dni)
+                        .setVisible(true);
+            }
+        }
+    }
+
+    // ── Carga historial médico en tabla ─────────────────────────────
+    private void cargarHistorial(String dni) {
+        DefaultTableModel modelo = new DefaultTableModel(
+                new String[]{"FECHA", "DIAGNÓSTICO", "TRATAMIENTO", "OBSERVACIONES"}, 0) {
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
+        };
+        Conexion.cargaTablaConsultasMedicas(modelo, dni);
+        Tabla.setModel(modelo);
+    }
+
+    // ── Doble clic en tabla → muestra informe ───────────────────────
+    private void TablaMouseClicked(java.awt.event.MouseEvent evt) {
+        if (evt.getClickCount() == 2) {
+            int fila = Tabla.getSelectedRow();
+            if (fila >= 0) {
+                String info
+                        = "FECHA: " + Tabla.getValueAt(fila, 0) + "\n\n"
+                        + "DIAGNÓSTICO:\n" + Tabla.getValueAt(fila, 1) + "\n\n"
+                        + "TRATAMIENTO:\n" + Tabla.getValueAt(fila, 2) + "\n\n"
+                        + "OBSERVACIONES:\n" + Tabla.getValueAt(fila, 3);
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        info, "INFORME MÉDICO",
+                        javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+
+

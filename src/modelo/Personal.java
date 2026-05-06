@@ -9,81 +9,79 @@ package modelo;
  * @author lajot
  */
 public class Personal {
-    
-        public String Colegiado;                   
-        public String Nombre;                
-        public String Apellidos;             
-        public int Telefono;
-        public String Usuario;
-        public String Contraseña;
-        public String Tipo;
 
-    public Personal(String Colegiado, String Nombre, String Apellidos, int Telefono, String Usuario, String Contraseña, String Tipo) {
-        this.Colegiado = Colegiado;
-        this.Nombre = Nombre;
-        this.Apellidos = Apellidos;
-        this.Telefono = Telefono;
-        this.Usuario = Usuario;
-        this.Contraseña = Contraseña;
-        this.Tipo = Tipo;
+    private int numeroColegiado;
+    private String nombre;
+    private String apellidos;
+    private int telefono;
+    private String usuario;
+    private String contrasenya;
+    private String tipo;
+
+    public Personal(int numeroColegiado, String nombre, String apellidos, int telefono, String usuario, String contrasenya, String tipo) {
+        this.numeroColegiado = numeroColegiado;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.telefono = telefono;
+        this.usuario = usuario;
+        this.contrasenya = contrasenya;
+        this.tipo = tipo;
     }
 
-    public String getColegiado() {
-        return Colegiado;
+    public int getNumeroColegiado() {
+        return numeroColegiado;
     }
 
-    public void setColegiado(String Colegiado) {
-        this.Colegiado = Colegiado;
+    public void setNumeroColegiado(int numeroColegiado) {
+        this.numeroColegiado = numeroColegiado;
     }
 
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getApellidos() {
-        return Apellidos;
+        return apellidos;
     }
 
-    public void setApellidos(String Apellidos) {
-        this.Apellidos = Apellidos;
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
     }
 
     public int getTelefono() {
-        return Telefono;
+        return telefono;
     }
 
-    public void setTelefono(int Telefono) {
-        this.Telefono = Telefono;
+    public void setTelefono(int telefono) {
+        this.telefono = telefono;
     }
 
     public String getUsuario() {
-        return Usuario;
+        return usuario;
     }
 
-    public void setUsuario(String Usuario) {
-        this.Usuario = Usuario;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
-    public String getContraseña() {
-        return Contraseña;
+    public String getContrasenya() {
+        return contrasenya;
     }
 
-    public void setContraseña(String Contraseña) {
-        this.Contraseña = Contraseña;
+    public void setContrasenya(String contrasenya) {
+        this.contrasenya = contrasenya;
     }
 
     public String getTipo() {
-        return Tipo;
+        return tipo;
     }
 
-    public void setTipo(String Tipo) {
-        this.Tipo = Tipo;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
-    
-        
 }

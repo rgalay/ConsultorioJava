@@ -4,20 +4,28 @@
  */
 package vistas;
 
+import bbdd.Conexion;
+import modelo.Paciente;
+import javax.swing.table.DefaultTableModel;
+import utilidades.Utilidades;
+
 /**
  *
  * @author lajot
  */
 public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NuevaConsultaEnfermeria.class.getName());
 
+        private String dniActual = "";
     /**
      * Creates new form NuevaConsultaEnfermeria
      */
     public NuevaConsultaEnfermeria(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setResizable(false);
+        Utilidades.centrarVentana(this);
     }
 
     /**
@@ -43,7 +51,7 @@ public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        CampoTeléfono = new javax.swing.JTextField();
+        CampoTelefono = new javax.swing.JTextField();
         CampoNombre = new javax.swing.JTextField();
         CampoApellidos = new javax.swing.JTextField();
         CampoEmail = new javax.swing.JTextField();
@@ -135,8 +143,10 @@ public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
         jLabel8.setText("Teléfono");
 
         BotonNuevoInforme.setText("Nuevo Informe");
+        BotonNuevoInforme.addActionListener(this::BotonNuevoInformeActionPerformed);
 
         BotonNuevaCita.setText("Nueva Cita");
+        BotonNuevaCita.addActionListener(this::BotonNuevaCitaActionPerformed);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -161,7 +171,7 @@ public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
                         .addGap(31, 31, 31)
                         .addComponent(jLabel8)
                         .addGap(18, 18, 18)
-                        .addComponent(CampoTeléfono, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(CampoTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(34, 34, 34)
                         .addComponent(jLabel5)
                         .addGap(18, 18, 18)
@@ -178,7 +188,7 @@ public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
                     .addComponent(jLabel6)
                     .addComponent(CampoApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(CampoTeléfono, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CampoTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(CampoEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
@@ -191,8 +201,10 @@ public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
         BotonBuscarPaciente.setBackground(new java.awt.Color(0, 0, 0));
         BotonBuscarPaciente.setForeground(new java.awt.Color(255, 255, 255));
         BotonBuscarPaciente.setText("BUSCAR PACIENTE");
+        BotonBuscarPaciente.addActionListener(this::BotonBuscarPacienteActionPerformed);
 
         BotonActualizar.setText("ACTUALIZAR TABLA");
+        BotonActualizar.addActionListener(this::BotonActualizarActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -254,6 +266,63 @@ public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void BotonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonActualizarActionPerformed
+        if (!dniActual.isEmpty())
+            cargarHistorial(dniActual);  // TODO add your handling code here:
+    }//GEN-LAST:event_BotonActualizarActionPerformed
+
+    private void BotonBuscarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBuscarPacienteActionPerformed
+       String dni = CampoDni.getText().trim().toUpperCase();
+
+        if (!Utilidades.validarDNI(dni)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "DNI no válido.");
+            return;
+        }
+
+        if (Conexion.compruebaDni(dni)) {
+            Paciente p = Conexion.recuperaDatosPaciente(dni);
+            CampoNombre.setText(p.getNombre());
+            CampoApellidos.setText(p.getApellidos());
+            CampoTelefono.setText(String.valueOf(p.getTelefono()));
+            CampoEmail.setText(p.getEmail());
+            dniActual = dni;
+            cargarHistorial(dni);
+        } else {
+            int op = javax.swing.JOptionPane.showConfirmDialog(this,
+                "No existe paciente con ese DNI. ¿Desea registrarlo?",
+                "Paciente no encontrado",
+                javax.swing.JOptionPane.YES_NO_OPTION);
+            if (op == javax.swing.JOptionPane.YES_OPTION) {
+                new NuevoPaciente((java.awt.Frame) this.getParent(), true, dni)
+                    .setVisible(true);
+            }
+        }
+    } // TODO add your handling code here:
+    }//GEN-LAST:event_BotonBuscarPacienteActionPerformed
+
+    private void BotonNuevoInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonNuevoInformeActionPerformed
+        if (dniActual.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Primero busca un paciente.");
+            return;
+        }
+        new NuevoInformeEnfermeria((java.awt.Frame) this.getParent(), true, dniActual)
+            .setVisible(true);
+    // TODO add your handling code here:
+    }//GEN-LAST:event_BotonNuevoInformeActionPerformed
+
+    private void BotonNuevaCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonNuevaCitaActionPerformed
+      if (dniActual.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Primero busca un paciente.");
+            return;
+        }
+        String nombreCompleto = CampoNombre.getText() + " " + CampoApellidos.getText();
+        new NuevaCitaEnfermeria((java.awt.Frame) this.getParent(), true,
+            dniActual, nombreCompleto).setVisible(true);
+      // TODO add your handling code here:
+    }//GEN-LAST:event_BotonNuevaCitaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -300,7 +369,7 @@ public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
     private javax.swing.JTextField CampoDni;
     private javax.swing.JTextField CampoEmail;
     private javax.swing.JTextField CampoNombre;
-    private javax.swing.JTextField CampoTeléfono;
+    private javax.swing.JTextField CampoTelefono;
     private javax.swing.JTable Tabla;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -315,4 +384,32 @@ public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
-}
+
+    private void cargarHistorial(String dni) {
+        DefaultTableModel modelo = new DefaultTableModel(
+            new String[]{"FECHA","MÁXIMA","MÍNIMA","GLUCOSA","PESO"}, 0) {
+            public boolean isCellEditable(int r, int c) { return false; }
+        };
+        Conexion.cargaTablaConsultasEnfermeria(modelo, dni);
+        Tabla.setModel(modelo);
+    }
+
+    private void TablaMouseClicked(java.awt.event.MouseEvent evt) {
+        if (evt.getClickCount() == 2) {
+            int fila = Tabla.getSelectedRow();
+            if (fila >= 0) {
+                String info =
+                    "FECHA: "   + Tabla.getValueAt(fila, 0) + "\n"
+                    + "MÁXIMA: "+ Tabla.getValueAt(fila, 1) + "\n"
+                    + "MÍNIMA: "+ Tabla.getValueAt(fila, 2) + "\n"
+                    + "GLUCOSA: "+ Tabla.getValueAt(fila, 3)+ "\n"
+                    + "PESO: "  + Tabla.getValueAt(fila, 4);
+                javax.swing.JOptionPane.showMessageDialog(this,
+                    info, "INFORME ENFERMERÍA",
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        
+        
+    }
+
