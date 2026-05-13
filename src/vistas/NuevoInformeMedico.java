@@ -6,6 +6,7 @@ package vistas;
 import bbdd.Conexion;
 import modelo.Consulta;
 import utilidades.Utilidades;
+import static vistas.NuevaConsultaMedica.DNI;
 
 /**
  *
@@ -15,7 +16,7 @@ public class NuevoInformeMedico extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NuevoInformeMedico.class.getName());
 
-    private String dni;
+  
     /**
      * Creates new form Medico
      */
@@ -24,9 +25,12 @@ public class NuevoInformeMedico extends javax.swing.JDialog {
         initComponents();
         setResizable(false);
         Utilidades.centrarVentana(this);
-        this.dni = dni;
-        CampoDni.setText(dni);
+        
+       
         CampoDni.setEditable(false);
+        CampoDni.setBackground(new java.awt.Color(220, 220, 220));
+        CampoDni.setText(DNI);
+
     }
 
     /**
@@ -90,6 +94,8 @@ public class NuevoInformeMedico extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("DNI PACIENTE");
+
+        CampoDni.setEditable(false);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -186,40 +192,7 @@ public class NuevoInformeMedico extends javax.swing.JDialog {
     }//GEN-LAST:event_BotonCancelarActionPerformed
 
     private void BotonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGuardarActionPerformed
-        String diag = CampoDiagnostico.getText().trim();
-        String trat = CampoTratamiento.getText().trim();
-        String obs = CampoObservaciones.getText().trim();
-
-        if (diag.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "El diagnóstico es obligatorio.");
-            return;
-        }
-        if (trat.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "El tratamiento es obligatorio.");
-            return;
-        }
-        if (obs.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Las observaciones son obligatorias.");
-            return;
-        }
-
-        int colegiado = Integer.parseInt(Conexion.datosPersonal[1]);
-        Consulta c = new Consulta(dni, new java.util.Date(),
-                diag, trat, obs, colegiado);
-
-        if (Conexion.registrarConsultaMedica(c)) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Registro realizado correctamente");
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Error en la acción de registro. Inténtelo más tarde o "
-                    + "póngase en contacto con el administrador del sistema.");
-        }
-        this.dispose();
-    }   // TODO add your handling code here:
+    guardarInforme();
     }//GEN-LAST:event_BotonGuardarActionPerformed
 
     /**
@@ -276,7 +249,77 @@ public class NuevoInformeMedico extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 
+    private void guardarInforme() {
 
+        String diag = CampoDiagnostico.getText().trim();
+        String trat = CampoTratamiento.getText().trim();
+        String obs = CampoObservaciones.getText().trim();
+
+        System.out.println("=== GUARDAR INFORME MÉDICO ===");
+        System.out.println("DNI:          " + DNI);
+        System.out.println("Diagnóstico:  " + diag);
+        System.out.println("Tratamiento:  " + trat);
+        System.out.println("Observaciones:" + obs);
+
+
+        if (diag.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "El diagnóstico es obligatorio.",
+                    "Error de validación",
+                    javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoDiagnostico.requestFocus();
+            return;
+        }
+        if (trat.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "El tratamiento es obligatorio.",
+                    "Error de validación",
+                    javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoTratamiento.requestFocus();
+            return;
+        }
+        if (obs.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Las observaciones son obligatorias.",
+                    "Error de validación",
+                    javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoObservaciones.requestFocus();
+            return;
+        }
+
+        int colegiado = Integer.parseInt(Conexion.datosPersonal[1]);
+
+        System.out.println("Colegiado: " + colegiado);
+        System.out.println("Llamando a Conexion.registrarConsultaMedica...");
+
+        modelo.Consulta consulta = new modelo.Consulta(
+                DNI,
+                new java.util.Date(), 
+                diag,
+                trat,
+                obs,
+                colegiado
+        );
+
+        boolean resultado = Conexion.registrarConsultaMedica(consulta);
+        System.out.println("Resultado: " + resultado);
+
+        if (resultado) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Registro realizado correctamente.",
+                    "Éxito",
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Error en la acción de registro. Inténtelo más tarde o "
+                    + "póngase en contacto con el administrador del sistema.",
+                    "Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+}
 
     
 

@@ -4,19 +4,23 @@
  */
 package utilidades;
 
-import org.apache.commons.mail.DefaultAuthentificator;
+
 import com.sun.jdi.connect.Transport;
 import java.net.Authenticator;
 import java.util.Properties;
 import java.util.Properties;
-import org.apache.commons.mail.EmailAttachment;
-import org.apache.commons.mail.SimipleEmail;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.SimpleEmail;
+
 
 
 /**
  *
  * @author lajot
  */
+
+
 public class UtilidadesEmail {
     
     String asunto;
@@ -37,53 +41,34 @@ public class UtilidadesEmail {
         this.destinatario = destinatario;
     }
 
-    public String getAsunto() {
-        return asunto;
-    }
-
-    public void setAsunto(String asunto) {
-        this.asunto = asunto;
-    }
-
-    public String getMensaje() {
-        return mensaje;
-    }
-
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
-    }
-
-    public String getDestinatario() {
-        return destinatario;
-    }
-
-    public void setDestinatario(String destinatario) {
-        this.destinatario = destinatario;
-    }
-
-    public String getRuta() {
-        return ruta;
-    }
-
-    public void setRuta(String ruta) {
-        this.ruta = ruta;
-    }
-    
     public boolean enviarMailSimple() {
-        SimpleEmail email = new SimpleEmail();
-        email.setHostName("smtp.hostinger.com");
-        email.setSmtpPort(465);
-        email.setAuthenticator(new DefaultAuthenticator("noreply@reynaldomd.com", "2023-Online"));
-        email.setSSLonConnect(true);
-        email.setCharset("UTF-8");
-        email.setFrom("noreply@reynaldomd.com");
-        email.setSubject(this.asunto);
-        
-        email.setMsg(this.mensaje); 
-        email.addTo(this.destinatario);
-        email.send();
-        return true;
-                
+        try {
+            SimpleEmail email = new SimpleEmail();
+
+            // CONFIGURACIÓN SMTP (Hostinger)
+            email.setHostName("smtp.hostinger.com");
+            email.setSmtpPort(465);
+            email.setAuthenticator(
+                new DefaultAuthenticator("consultorio@reynaldomd.com", "2024-Consultorio")
+            );
+
+            email.setSSLOnConnect(true);
+            email.setCharset("UTF-8");
+
+            // DATOS DEL CORREO
+            email.setFrom("consultorio@reynaldomd.com");
+            email.setSubject(this.asunto);
+            email.setMsg(this.mensaje);
+            email.addTo(this.destinatario);
+
+            // ENVÍO
+            email.send();
+
+            return true;
+
+        } catch (EmailException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
-

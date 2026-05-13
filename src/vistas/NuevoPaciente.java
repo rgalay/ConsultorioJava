@@ -21,18 +21,28 @@ public class NuevoPaciente extends javax.swing.JDialog {
      */
     private String dniPrevio;
     
+    public static String dni;
+    
     public NuevoPaciente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setResizable(false);
-        setResizable(false);
         Utilidades.centrarVentana(this);
-        String dni = null;
         this.dniPrevio = dni;
+
+    // ── DNI se carga automáticamente y no es editable ────────────
         CampoDni.setText(dni);
         CampoDni.setEditable(false);
-        Conexion.cargasComboCp(ComboCp);
+        CampoDni.setBackground(new java.awt.Color(220, 220, 220));
 
+        // ── Fecha mínima razonable para nacimiento ───────────────────
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.set(1900, 0, 1);
+        jCalendar1.setMinSelectableDate(cal.getTime());
+        jCalendar1.setMaxSelectableDate(new java.util.Date());
+
+        // ── Carga códigos postales en el combo ───────────────────────
+        Conexion.cargasComboCp(ComboCp);
     }
 
 
@@ -80,7 +90,7 @@ public class NuevoPaciente extends javax.swing.JDialog {
         RadioOcasional = new javax.swing.JRadioButton();
         RadioNulo = new javax.swing.JRadioButton();
         jCalendar1 = new com.toedter.calendar.JCalendar();
-        jButton1 = new javax.swing.JButton();
+        BotonRegistrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -312,9 +322,10 @@ public class NuevoPaciente extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        jButton1.setBackground(new java.awt.Color(0, 102, 102));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("REGISTRAR");
+        BotonRegistrar.setBackground(new java.awt.Color(0, 102, 102));
+        BotonRegistrar.setForeground(new java.awt.Color(255, 255, 255));
+        BotonRegistrar.setText("REGISTRAR");
+        BotonRegistrar.addActionListener(this::BotonRegistrarActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -330,7 +341,7 @@ public class NuevoPaciente extends javax.swing.JDialog {
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(122, 122, 122)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(BotonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(30, 30, 30))
         );
         jPanel1Layout.setVerticalGroup(
@@ -342,7 +353,7 @@ public class NuevoPaciente extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(BotonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 20, Short.MAX_VALUE))
         );
@@ -360,6 +371,10 @@ public class NuevoPaciente extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BotonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonRegistrarActionPerformed
+     registrarPaciente();      
+    }//GEN-LAST:event_BotonRegistrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -399,6 +414,7 @@ public class NuevoPaciente extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BotonRegistrar;
     private javax.swing.JTextField CampoAntecedentes;
     private javax.swing.JTextField CampoApellidos;
     private javax.swing.JTextField CampoDni;
@@ -415,7 +431,6 @@ public class NuevoPaciente extends javax.swing.JDialog {
     private javax.swing.JRadioButton RadioOcasional;
     private javax.swing.JRadioButton RadioOtros;
     private javax.swing.JRadioButton RadioSi;
-    private javax.swing.JButton jButton1;
     private com.toedter.calendar.JCalendar jCalendar1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -437,59 +452,165 @@ public class NuevoPaciente extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel5;
     // End of variables declaration//GEN-END:variables
 
-    private void BotonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {
-        String nombre  = CampoNombre.getText().trim();
-        String apell   = CampoApellidos.getText().trim();
-        String telStr  = CampoTelefono.getText().trim();
-        String email   = CampoEmail.getText().trim();
-        String antFam  = CampoAntecedentes.getText().trim();
-        String antPers = CampoPersonal.getText().trim();
+    private void registrarPaciente() {
 
+        // ── Recoge datos del formulario ──────────────────────────────
+        String nombre   = CampoNombre.getText().trim();
+        String apell    = CampoApellidos.getText().trim();
+        String telStr   = CampoTelefono.getText().trim();
+        String email    = CampoEmail.getText().trim();
+        String antFam   = CampoAntecedentes.getText().trim();
+        String antPers  = CampoPersonal.getText().trim();
+        java.util.Date fechaNac = jCalendar1.getDate();
+
+        System.out.println("=== REGISTRAR PACIENTE ===");
+        System.out.println("DNI:      " + dniPrevio);
+        System.out.println("Nombre:   " + nombre);
+        System.out.println("Apellidos:" + apell);
+        System.out.println("Telefono: " + telStr);
+        System.out.println("Email:    " + email);
+        System.out.println("FechaNac: " + fechaNac);
+        System.out.println("CP:       " + ComboCp.getSelectedItem());
+
+        // ── Validaciones ─────────────────────────────────────────────
         if (nombre.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                "El nombre es obligatorio."); return;
+                "El nombre es obligatorio.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoNombre.requestFocus();
+            return;
         }
         if (apell.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                "Los apellidos son obligatorios."); return;
+                "Los apellidos son obligatorios.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoApellidos.requestFocus();
+            return;
         }
-        if (telStr.isEmpty()) {
+        if (fechaNac == null) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                "El teléfono es obligatorio."); return;
+                "La fecha de nacimiento es obligatoria.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (telStr.isEmpty() || !telStr.matches("\\d{9}")) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "El teléfono debe tener exactamente 9 dígitos.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoTelefono.requestFocus();
+            return;
         }
         if (!Utilidades.validarEmail(email)) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                "El email no tiene formato válido."); return;
+                "El email no tiene un formato válido.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoEmail.requestFocus();
+            return;
         }
         if (ComboCp.getSelectedIndex() == 0) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                "Selecciona un código postal."); return;
+                "Selecciona un código postal.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            ComboCp.requestFocus();
+            return;
+        }
+        if (!RadioMujer.isSelected() && !RadioHombre.isSelected()
+                && !RadioOtros.isSelected()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Selecciona el sexo.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!RadioNo.isSelected() && !RadioSi.isSelected()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Selecciona si el paciente fuma o no.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!RadioOcasional.isSelected() && !RadioHabitual.isSelected()
+                && !RadioNulo.isSelected()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Selecciona el consumo de alcohol.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (antFam.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Los antecedentes familiares son obligatorios.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoAntecedentes.requestFocus();
+            return;
+        }
+        if (antPers.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Los antecedentes personales son obligatorios.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoPersonal.requestFocus();
+            return;
         }
 
+        // ── Recoge valores de radio buttons ──────────────────────────
         String sexo    = RadioMujer.isSelected()     ? "M" :
                          RadioHombre.isSelected()    ? "H" : "OTROS";
-        String tabaco  = RadioNo.isSelected()        ? "NO" : "SI";
+
+        String tabaco  = RadioSi.isSelected()        ? "SI" : "NO";
+
         String alcohol = RadioOcasional.isSelected() ? "Ocasional" :
                          RadioHabitual.isSelected()  ? "Habitual"  : "Nulo";
 
         int cp  = Integer.parseInt(ComboCp.getSelectedItem().toString());
         int tel = Integer.parseInt(telStr);
 
+        System.out.println("Sexo:    " + sexo);
+        System.out.println("Tabaco:  " + tabaco);
+        System.out.println("Alcohol: " + alcohol);
+        System.out.println("CP:      " + cp);
+
+        // ── Crea objeto Paciente ─────────────────────────────────────
         Paciente p = new Paciente(
-            dniPrevio, nombre, apell,
-            new java.util.Date(),
-            tel, email, cp, sexo, tabaco, alcohol,
-            antFam, antPers, new java.util.Date()
+            dniPrevio,
+            nombre,
+            apell,
+            fechaNac,
+            tel,
+            email,
+            cp,
+            sexo,
+            tabaco,
+            alcohol,
+            antFam,
+            antPers,
+            new java.util.Date()  
         );
 
-        if (Conexion.registrarPaciente(p)) {
+        System.out.println("Llamando a Conexion.registrarPaciente...");
+        boolean resultado = Conexion.registrarPaciente(p);
+        System.out.println("Resultado: " + resultado);
+
+
+        if (resultado) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                "Paciente registrado correctamente.");
+                "Paciente registrado correctamente.",
+                "Éxito",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            dispose();
         } else {
             javax.swing.JOptionPane.showMessageDialog(this,
                 "Error en el registro del paciente. Inténtelo más tarde o "
-                + "póngase en contacto con el administrador del sistema.");
+                + "póngase en contacto con el administrador del sistema.",
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE);
         }
-        this.dispose();
     }
 }

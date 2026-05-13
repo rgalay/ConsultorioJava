@@ -186,6 +186,7 @@ public class Pacientes extends javax.swing.JDialog {
         jLabel15.setText("LISTADO DE PACIENTES");
 
         BotonActualizar.setText("ACTUALIZAR");
+        BotonActualizar.addActionListener(this::BotonActualizarActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -214,12 +215,13 @@ public class Pacientes extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel15)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(103, 103, 103))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(9, 9, 9)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                         .addComponent(BotonActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(55, 55, 55))
         );
@@ -237,6 +239,10 @@ public class Pacientes extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BotonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonActualizarActionPerformed
+      actualizar();  // TODO add your handling code here:
+    }//GEN-LAST:event_BotonActualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -299,28 +305,41 @@ public class Pacientes extends javax.swing.JDialog {
 
     private void cargarTablaPacientes() {
         DefaultTableModel modelo = new DefaultTableModel(
-            new String[]{"DNI","NOMBRE","APELLIDOS","TELÉFONO","CP"}, 0) {
+            new String[]{"DNI", "NOMBRE", "APELLIDOS", "TELÉFONO", "CP"}, 0) {
             public boolean isCellEditable(int r, int c) { return false; }
         };
         Conexion.cargaTablaPacientes(modelo);
         Tabla.setModel(modelo);
 
+        // ── Listener de selección de fila ────────────────────────────
         Tabla.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && Tabla.getSelectedRow() >= 0) {
                 int fila = Tabla.getSelectedRow();
-                CampoDni.setText(Tabla.getValueAt(fila, 0).toString());
-                CampoNombre.setText(Tabla.getValueAt(fila, 1).toString());
-                CampoApellidos.setText(Tabla.getValueAt(fila, 2).toString());
-                CampoTelefono.setText(Tabla.getValueAt(fila, 3).toString());
 
-                int cp = Integer.parseInt(Tabla.getValueAt(fila, 4).toString());
+                String dni      = Tabla.getValueAt(fila, 0).toString();
+                String nombre   = Tabla.getValueAt(fila, 1).toString();
+                String apell    = Tabla.getValueAt(fila, 2).toString();
+                String telefono = Tabla.getValueAt(fila, 3).toString();
+                String cp       = Tabla.getValueAt(fila, 4).toString();
+
+                System.out.println("Fila seleccionada → DNI: " + dni);
+
+                // ── Rellena los campos con los datos de la fila ──────
+                CampoDni.setText(dni);
+                CampoNombre.setText(nombre);
+                CampoApellidos.setText(apell);
+                CampoTelefono.setText(telefono);
+
+                // ── Selecciona el CP correcto en el combo ────────────
+                int cpInt = Integer.parseInt(cp);
                 for (int i = 0; i < ComboCp.getItemCount(); i++) {
                     if (String.valueOf(ComboCp.getItemAt(i))
-                            .equals(String.valueOf(cp))) {
+                            .equals(String.valueOf(cpInt))) {
                         ComboCp.setSelectedIndex(i);
                         break;
                     }
                 }
+
                 activarFormulario();
             }
         });
@@ -347,35 +366,90 @@ public class Pacientes extends javax.swing.JDialog {
         CampoTelefono.setText("");
     }
 
-    private void BotonActualizarActionPerformed(java.awt.event.ActionEvent evt) {
-        if (CampoNombre.getText().trim().isEmpty()
-                || CampoApellidos.getText().trim().isEmpty()
-                || CampoTelefono.getText().trim().isEmpty()) {
+
+    private void actualizar() {
+
+        String dni      = CampoDni.getText().trim();
+        String nombre   = CampoNombre.getText().trim();
+        String apell    = CampoApellidos.getText().trim();
+        String telefono = CampoTelefono.getText().trim();
+        String cp       = ComboCp.getSelectedItem().toString();
+
+        // ── Prints de depuración ─────────────────────────────────────
+        System.out.println("=== ACTUALIZAR PACIENTE ===");
+        System.out.println("DNI:      " + dni);
+        System.out.println("Nombre:   " + nombre);
+        System.out.println("Apellidos:" + apell);
+        System.out.println("Teléfono: " + telefono);
+        System.out.println("CP:       " + cp);
+
+        // ── Validaciones ─────────────────────────────────────────────
+        if (nombre.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                "Todos los campos son obligatorios."); return;
+                "El nombre es obligatorio.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoNombre.requestFocus();
+            return;
+        }
+        if (apell.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Los apellidos son obligatorios.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoApellidos.requestFocus();
+            return;
+        }
+        if (telefono.isEmpty() || !telefono.matches("\\d{9}")) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "El teléfono debe tener exactamente 9 dígitos.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoTelefono.requestFocus();
+            return;
+        }
+        if (cp.equals("Seleccione")) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Selecciona un código postal.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
         }
 
+        // ── Mete los datos en ArrayList y llama a Conexion ───────────
+        // orden: [0]=dni, [1]=nombre, [2]=apellidos, [3]=telefono, [4]=cp
         ArrayList<String> datos = new ArrayList<>();
-        datos.add(CampoDni.getText().trim());
-        datos.add(CampoNombre.getText().trim());
-        datos.add(CampoApellidos.getText().trim());
-        datos.add(CampoTelefono.getText().trim());
-        datos.add(ComboCp.getSelectedItem().toString());
+        datos.add(dni);
+        datos.add(nombre);
+        datos.add(apell);
+        datos.add(telefono);
+        datos.add(cp);
 
-        if (Conexion.actualizarPaciente(datos)) {
+        System.out.println("Llamando a Conexion.actualizarPaciente...");
+        boolean resultado = Conexion.actualizarPaciente(datos);
+        System.out.println("Resultado: " + resultado);
+
+        if (resultado) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                "Datos del paciente actualizados correctamente");
+                "Datos del paciente actualizados correctamente.",
+                "Éxito",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+
+            // ── Recarga la tabla con los datos actualizados ──────────
             DefaultTableModel modelo = new DefaultTableModel(
-                new String[]{"DNI","NOMBRE","APELLIDOS","TELÉFONO","CP"}, 0) {
+                new String[]{"DNI", "NOMBRE", "APELLIDOS", "TELÉFONO", "CP"}, 0) {
                 public boolean isCellEditable(int r, int c) { return false; }
             };
             Conexion.cargaTablaPacientes(modelo);
             Tabla.setModel(modelo);
+            desactivarFormulario();
+
         } else {
             javax.swing.JOptionPane.showMessageDialog(this,
                 "Error en la actualización del paciente. Inténtelo más tarde o "
-                + "póngase en contacto con el administrador del sistema.");
+                + "póngase en contacto con el administrador del sistema.",
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE);
         }
-        desactivarFormulario();
     }
 }

@@ -7,6 +7,7 @@ package vistas;
 import bbdd.Conexion;
 import modelo.ConsultaEnfermeria;
 import utilidades.Utilidades;
+import static vistas.NuevaConsultaMedica.DNI;
 
 /**
  *
@@ -16,7 +17,6 @@ public class NuevoInformeEnfermeria extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NuevoInformeEnfermeria.class.getName());
 
-    private String dni;
     /**
      * Creates new form Enfermeria
      */
@@ -25,9 +25,10 @@ public class NuevoInformeEnfermeria extends javax.swing.JDialog {
         initComponents();
         setResizable(false);
         Utilidades.centrarVentana(this);
-        this.dni = dni;
-        CampoDni.setText(dni);
+
         CampoDni.setEditable(false);
+        CampoDni.setBackground(new java.awt.Color(220, 220, 220));
+        CampoDni.setText(DNI);
     }
 
     /**
@@ -96,6 +97,8 @@ public class NuevoInformeEnfermeria extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("DNI PACIENTE");
+
+        CampoDni.setEditable(false);
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "PESO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(255, 255, 255))); // NOI18N
         jPanel5.setOpaque(false);
@@ -203,6 +206,7 @@ public class NuevoInformeEnfermeria extends javax.swing.JDialog {
         BotonGuardar.setBackground(new java.awt.Color(0, 102, 102));
         BotonGuardar.setForeground(new java.awt.Color(255, 255, 255));
         BotonGuardar.setText("Guardar");
+        BotonGuardar.addActionListener(this::BotonGuardarActionPerformed);
 
         BotonCancelar.setBackground(new java.awt.Color(0, 102, 102));
         BotonCancelar.setForeground(new java.awt.Color(255, 255, 255));
@@ -272,6 +276,10 @@ public class NuevoInformeEnfermeria extends javax.swing.JDialog {
        this.dispose(); // TODO add your handling code here:
     }//GEN-LAST:event_BotonCancelarActionPerformed
 
+    private void BotonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGuardarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BotonGuardarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -340,7 +348,7 @@ private void BotonGuardar(java.awt.event.ActionEvent evt) {
             int colegiado  = Integer.parseInt(Conexion.datosPersonal[1]);
 
             ConsultaEnfermeria ce = new ConsultaEnfermeria(
-                dni, new java.util.Date(),
+                DNI, new java.util.Date(),
                 maxima, minima, glucosa, peso, colegiado);
 
             if (Conexion.registrarConsultaEnfermeria(ce)) {

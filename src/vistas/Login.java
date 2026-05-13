@@ -142,7 +142,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_CampoUsuarioActionPerformed
 
     private void BotonEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEntrarActionPerformed
-     entrar();    // TODO add your handling code here:
+      entrar();    // TODO add your handling code here:
     }//GEN-LAST:event_BotonEntrarActionPerformed
 
     /**

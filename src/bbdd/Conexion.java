@@ -37,7 +37,7 @@ import utilidades.Encriptado;
     // ── CONECTAR ────────────────────────────────────────────────────
     public static Connection Conectar() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             return DriverManager.getConnection(URL, USER, PASS);
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println("Error de conexión: " + e.getMessage());
@@ -302,30 +302,30 @@ import utilidades.Encriptado;
         }
     }
 
-    // ── ACTUALIZAR PACIENTE ─────────────────────────────────────────
-    // datos: [0]=dni, [1]=nombre, [2]=apellidos, [3]=telefono, [4]=cp
+    // CTUALIZAR PACIENTE 
     public static boolean actualizarPaciente(ArrayList<String> datos) {
-        String SQL = "UPDATE paciente SET nombre=?, apellidos=?, telefono=?, cp=? WHERE dni=?";
-        Connection c = Conectar();
-        if (c == null) {
-            return false;
-        }
-        try {
-            PreparedStatement ps = c.prepareStatement(SQL);
-            ps.setString(1, Encriptado.Encriptar(datos.get(1)));
-            ps.setString(2, Encriptado.Encriptar(datos.get(2)));
-            ps.setInt(3, Integer.parseInt(datos.get(3)));
-            ps.setInt(4, Integer.parseInt(datos.get(4)));
-            ps.setString(5, Encriptado.Encriptar(datos.get(0)));
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.out.println("Error actualizarPaciente: " + e.getMessage());
-            return false;
-        } finally {
-            cerrar(c);
-        }
+    // datos: [0]=dni, [1]=nombre, [2]=apellidos, [3]=telefono, [4]=cp
+    String SQL = "UPDATE paciente SET nombre=?, apellidos=?, telefono=?, cp=? WHERE dni=?";
+    Connection c = Conectar();
+    if (c == null) return false;
+    try {
+        PreparedStatement ps = c.prepareStatement(SQL);
+        ps.setString(1, Encriptado.Encriptar(datos.get(1))); // nombre enc
+        ps.setString(2, Encriptado.Encriptar(datos.get(2))); // apellidos enc
+        ps.setInt(3,    Integer.parseInt(datos.get(3)));      // telefono
+        ps.setInt(4,    Integer.parseInt(datos.get(4)));      // cp
+        ps.setString(5, Encriptado.Encriptar(datos.get(0))); // dni enc → WHERE
+        
+        int filas = ps.executeUpdate();
+        System.out.println("Filas afectadas: " + filas);
+        return filas > 0;
+    } catch (SQLException e) {
+        System.out.println("Error actualizarPaciente: " + e.getMessage());
+        return false;
+    } finally {
+        cerrar(c);
     }
-
+}
     // ── HISTORIAL CONSULTAS MÉDICAS ─────────────────────────────────
     public static void cargaTablaConsultasMedicas(DefaultTableModel modelo, String dni) {
         String SQL = "SELECT fechaConsulta, diagnostico, tratamiento, observaciones "

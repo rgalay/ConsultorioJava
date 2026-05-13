@@ -5,40 +5,58 @@
 package vistas;
 
 import bbdd.Conexion;
-import javax.swing.JOptionPane;
 import modelo.Cita;
 import modelo.Paciente;
-import utilidades.Encriptado;
 import utilidades.Utilidades;
 import utilidades.UtilidadesEmail;
+import static vistas.NuevaConsultaMedica.DNI;
+import static vistas.NuevaConsultaMedica.NOMBRE;
+
 
 /**
  *
  * @author lajot
  */
-public class NuevaCitaMedica extends javax.swing.JDialog {
+public class NewCitaMedica extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NuevaCitaMedica.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NewCitaMedica.class.getName());
 
-     private String dni;
-    private String nombre;
+  
     /**
-     * Creates new form NuevaCita
+     * Creates new form NewCitaMedica
      */
-
-
-    public NuevaCitaMedica(java.awt.Frame parent, boolean modal) {
+    public NewCitaMedica(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setResizable(false);
         Utilidades.centrarVentana(this);
-        this.dni = dni;
-        this.nombre = nombre;
-        CampoDni.setText(dni);
+      
+        
+        
+        // ── DNI y Nombre se cargan automáticamente ───────────────────
+        
+        
+        
+
+        CampoDni.setText(DNI);
+
+        CampoNombre.setText(NOMBRE);
         CampoDni.setEditable(false);
-        CampoNombre.setText(nombre);
+        CampoDni.setBackground(new java.awt.Color(220, 220, 220));
+
+        
         CampoNombre.setEditable(false);
+        CampoNombre.setBackground(new java.awt.Color(220, 220, 220));
+
+        // ── Carga horas en ComboHora ─────────────────────────────────
+        ComboHora.removeAllItems();
+        ComboHora.addItem("Seleccione");
+        for (int h = 8; h <= 20; h++) {
+            ComboHora.addItem(h + ":00");
+            ComboHora.addItem(h + ":30");
+        }
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,7 +67,6 @@ public class NuevaCitaMedica extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -62,7 +79,7 @@ public class NuevaCitaMedica extends javax.swing.JDialog {
         CampoDni = new javax.swing.JTextField();
         BotonRegistrar = new javax.swing.JButton();
         ComboHora = new javax.swing.JComboBox<>();
-        campoDate = new com.toedter.calendar.JDateChooser();
+        CampoFecha = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -114,6 +131,10 @@ public class NuevaCitaMedica extends javax.swing.JDialog {
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Hora");
 
+        CampoNombre.setEditable(false);
+
+        CampoDni.setEditable(false);
+
         BotonRegistrar.setBackground(new java.awt.Color(0, 153, 153));
         BotonRegistrar.setForeground(new java.awt.Color(255, 255, 255));
         BotonRegistrar.setText("REGISTRAR");
@@ -141,7 +162,7 @@ public class NuevaCitaMedica extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ComboHora, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(CampoDni, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(campoDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CampoFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(CampoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(77, 77, 77))
         );
@@ -159,80 +180,33 @@ public class NuevaCitaMedica extends javax.swing.JDialog {
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(campoDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CampoFecha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jLabel6))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(ComboHora, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(34, 34, 34)
+                .addGap(38, 38, 38)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ComboHora, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addGap(43, 43, 43)
                 .addComponent(BotonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33))
-        );
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void BotonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonRegistrarActionPerformed
-    if (campoDate.getDate() == null) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar una fecha");
-        } else if (Utilidades.compruebaComboVacio(ComboHora)) {
-            Utilidades.alertaVacioCombo(ComboHora);
-        } else {
-            Cita c = new Cita();
-            c.setDniPaciente(Encriptado.Desencriptar(CampoDni.getText()));
-            c.setNombre(CampoNombre.getText());
-            c.setDia(campoDate.getDate());
-            c.setHora(Double.parseDouble(ComboHora.getSelectedItem().toString()));
-
-            if (Conexion.registrarCitaMedica(c)) {
-                JOptionPane.showMessageDialog(this, "Registro realizado correctamente");
-
-                // Enviar email al paciente
-                String emailPaciente = Conexion.recuperaDatosPaciente(CampoDni.getText()).getEmail();
-                String mensaje = "--------------Datos de la cita--------------\n\n"
-                        + "Dni del paciente: " + CampoDni.getText() + "\n"
-                        + "Nombre: " + CampoNombre.getText() + "\n"
-                        + "Día: " + c.getDia().toString() + "\n"
-                        + "Hora: " + c.getHora() + "\n\n"
-                        + "------------------------------------------------\n"
-                        + "Teléfono de atención al paciente: 976000000\n\n"
-                        + "Has recibido este email porque has solicitado una cita en el centro médico. "
-                        + "Por favor, no responda a este correo electrónico: ha sido generado automáticamente.";
-
-                UtilidadesEmail email = new UtilidadesEmail("Datos de su cita", mensaje, emailPaciente);
-                email.enviarMailSimple();
-
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Error en la acción de registro. Inténtelo más tarde o póngase en contacto con el administrador del sistema");
-            }
-        }    // TODO add your handling code here:
+        registrarCita();
     }//GEN-LAST:event_BotonRegistrarActionPerformed
 
     /**
@@ -260,7 +234,7 @@ public class NuevaCitaMedica extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                NuevaCitaMedica dialog = new NuevaCitaMedica(new javax.swing.JFrame(), true);
+                NewCitaMedica dialog = new NewCitaMedica(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -275,20 +249,68 @@ public class NuevaCitaMedica extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonRegistrar;
     private javax.swing.JTextField CampoDni;
+    private com.toedter.calendar.JDateChooser CampoFecha;
     private javax.swing.JTextField CampoNombre;
     private javax.swing.JComboBox<String> ComboHora;
-    private com.toedter.calendar.JDateChooser campoDate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables
 
+private void registrarCita() {
+        if (CampoFecha.getDate() == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "La fecha es obligatoria.");
+            return;
+        }
+        if (ComboHora.getSelectedIndex() == 0) {
+            javax.swing.JOptionPane.showMessageDialog(this, "La hora es obligatoria.");
+            return;
+        }
 
+        java.util.Date fecha = CampoFecha.getDate();
+        java.util.Date hoy = new java.util.Date();
+        if (!fecha.after(hoy)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "La fecha debe ser posterior a hoy.");
+            return;
+        }
 
+        double hora = Double.parseDouble((String) ComboHora.getSelectedItem());
+
+        modelo.Cita c = new modelo.Cita(
+                CampoDni.getText(),
+                CampoNombre.getText(),
+                fecha,
+                hora
+        );
+
+        if (bbdd.Conexion.registrarCitaMedica(c)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Registro realizado correctamente.");
+            this.dispose();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Error en la acción de registro. Inténtelo más tarde o póngase en contacto con el administrador del sistema.");
+        }
+    }
+
+ 
+  
+    private void enviarEmailCita(String dni, String nombreApellidos, java.util.Date fecha, int hora) {
+        modelo.Paciente p = bbdd.Conexion.recuperaDatosPaciente(dni);
+        if (p == null || p.getEmail() == null || p.getEmail().isEmpty()) return;
+        String diaFormateado = new java.text.SimpleDateFormat("d-MMMM-yyyy", new java.util.Locale("es", "ES")).format(fecha);
+        String cuerpo = "<b>--------------Datos de la cita--------------</b><br><br>"
+                + "Dni del paciente: <b>" + dni + "</b><br>"
+                + "Nombre: <b>" + nombreApellidos + "</b><br>"
+                + "Día: <b>" + diaFormateado + "</b><br>"
+                + "Hora: <b>" + hora + "</b><br><br>"
+                + "<p><img src=\"https://reynaldomd.com/firmacorreo/firmacorreo.png\"></p>";
+        utilidades.UtilidadesEmail email = new utilidades.UtilidadesEmail("Datos de su cita de enfermería", cuerpo, p.getEmail());
+        email.enviarMailSimple();
+    }
 }
+

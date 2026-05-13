@@ -124,6 +124,7 @@ public class PersonalMedico extends javax.swing.JDialog {
         ComboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
 
         BotonRegistrar.setText("REGISTRAR");
+        BotonRegistrar.addActionListener(this::BotonRegistrarActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -216,6 +217,10 @@ public class PersonalMedico extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void BotonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonRegistrarActionPerformed
+      registrarPersonal();  // TODO add your handling code here:
+    }//GEN-LAST:event_BotonRegistrarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -275,81 +280,130 @@ public class PersonalMedico extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 
-    private void BotonRegistrar(java.awt.event.ActionEvent evt) {
-        String numCol = CampoColegiado.getText().trim();
-        String nombre = CampoNombre.getText().trim();
-        String apell = CampoApellidos.getText().trim();
-        String telStr = CampoTelefono.getText().trim();
-        String usuario = CampoUsuario.getText().trim();
-        String pass = new String(CampoContraseña.getPassword()).trim();
-        String tipo = ComboTipo.getSelectedItem().toString();
+ private void registrarPersonal() {
 
+        // ── Recoge datos del formulario ──────────────────────────────
+        String numCol  = CampoColegiado.getText().trim();
+        String nombre  = CampoNombre.getText().trim();
+        String apell   = CampoApellidos.getText().trim();
+        String telStr  = CampoTelefono.getText().trim();
+        String usuario = CampoUsuario.getText().trim();
+        String pass    = new String(CampoContraseña.getPassword()).trim();
+        String tipo    = ComboTipo.getSelectedItem().toString();
+
+        // ── Validaciones ─────────────────────────────────────────────
         if (!Utilidades.validarColegiado(numCol)) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "El nº de colegiado debe tener 9 dígitos y no comenzar por 0.");
+                "El nº de colegiado debe tener 9 dígitos y no comenzar por 0.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoColegiado.requestFocus();
             return;
         }
         if (nombre.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "El nombre es obligatorio.");
+                "El nombre es obligatorio.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoNombre.requestFocus();
             return;
         }
         if (apell.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Los apellidos son obligatorios.");
+                "Los apellidos son obligatorios.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoApellidos.requestFocus();
             return;
         }
         if (telStr.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "El teléfono es obligatorio.");
+                "El teléfono es obligatorio.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoTelefono.requestFocus();
+            return;
+        }
+        if (!telStr.matches("\\d{9}")) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "El teléfono debe tener exactamente 9 dígitos.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoTelefono.requestFocus();
             return;
         }
         if (usuario.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "El usuario es obligatorio.");
+                "El usuario es obligatorio.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoUsuario.requestFocus();
             return;
         }
         if (pass.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "La contraseña es obligatoria.");
+                "La contraseña es obligatoria.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoContraseña.requestFocus();
             return;
         }
         if (tipo.equals("Seleccione")) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Selecciona un tipo.");
+                "Selecciona un tipo de personal.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            ComboTipo.requestFocus();
             return;
         }
 
+        // ── Comprueba que colegiado y usuario no existan ya en BD ────
         long colegiado = Long.parseLong(numCol);
 
         if (Conexion.compruebaNumColegiado(colegiado)) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Ese número de colegiado ya existe.");
+                "Ese número de colegiado ya está registrado.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoColegiado.requestFocus();
             return;
         }
         if (Conexion.compruebaUser(usuario)) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Ese usuario ya existe.");
+                "Ese nombre de usuario ya existe.",
+                "Error de validación",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            CampoUsuario.requestFocus();
             return;
         }
 
+        // ── Crea objeto Personal y lo envía a BD ─────────────────────
         Personal p = new Personal(
-                (int) colegiado, nombre, apell,
-                Integer.parseInt(telStr),
-                usuario, pass, tipo
+            (int) colegiado,
+            nombre,
+            apell,
+            Integer.parseInt(telStr),
+            usuario,
+            pass,   // se encripta dentro de Conexion.registrarPersonal()
+            tipo
         );
 
         if (Conexion.registrarPersonal(p)) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Registro realizado correctamente");
+                "Registro realizado correctamente.",
+                "Éxito",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE);
             resetFormulario();
         } else {
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Error en la acción de registro. Inténtelo más tarde o "
-                    + "póngase en contacto con el administrador del sistema.");
+                "Error en la acción de registro. Inténtelo más tarde o "
+                + "póngase en contacto con el administrador del sistema.",
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }
 
+    // ── Limpia todos los campos tras registrar ───────────────────────
     private void resetFormulario() {
         CampoColegiado.setText("");
         CampoNombre.setText("");
@@ -358,5 +412,7 @@ public class PersonalMedico extends javax.swing.JDialog {
         CampoUsuario.setText("");
         CampoContraseña.setText("");
         ComboTipo.setSelectedIndex(0);
+        CampoColegiado.requestFocus();
     }
+   
 }

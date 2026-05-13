@@ -5,6 +5,8 @@
 package vistas;
 
 import bbdd.Conexion;
+import javax.swing.JOptionPane;
+import javax.swing.UnsupportedLookAndFeelException;
 import modelo.Paciente;
 import javax.swing.table.DefaultTableModel;
 import utilidades.Utilidades;
@@ -13,9 +15,11 @@ import utilidades.Utilidades;
  *
  * @author lajot
  */
+
 public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NuevaConsultaEnfermeria.class.getName());
+    //private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NuevaConsultaEnfermeria.class.getName());
+
 
         private String dniActual = "";
     /**
@@ -61,6 +65,7 @@ public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
         BotonActualizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 204, 204));
 
@@ -141,6 +146,14 @@ public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Teléfono");
+
+        CampoTelefono.setEditable(false);
+
+        CampoNombre.setEditable(false);
+
+        CampoApellidos.setEditable(false);
+
+        CampoEmail.setEditable(false);
 
         BotonNuevoInforme.setText("Nuevo Informe");
         BotonNuevoInforme.addActionListener(this::BotonNuevoInformeActionPerformed);
@@ -264,6 +277,7 @@ public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void BotonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonActualizarActionPerformed
@@ -271,8 +285,9 @@ public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
             cargarHistorial(dniActual);  // TODO add your handling code here:
     }//GEN-LAST:event_BotonActualizarActionPerformed
 
+     public static String DNI;
     private void BotonBuscarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBuscarPacienteActionPerformed
-       String dni = CampoDni.getText().trim().toUpperCase();
+        String dni = CampoDni.getText().trim().toUpperCase();
 
         if (!Utilidades.validarDNI(dni)) {
             javax.swing.JOptionPane.showMessageDialog(this, "DNI no válido.");
@@ -289,76 +304,76 @@ public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
             cargarHistorial(dni);
         } else {
             int op = javax.swing.JOptionPane.showConfirmDialog(this,
-                "No existe paciente con ese DNI. ¿Desea registrarlo?",
-                "Paciente no encontrado",
-                javax.swing.JOptionPane.YES_NO_OPTION);
+                    "No existe paciente con ese DNI. ¿Desea registrarlo?",
+                    "Paciente no encontrado",
+                    javax.swing.JOptionPane.YES_NO_OPTION);
+
             if (op == javax.swing.JOptionPane.YES_OPTION) {
-                new NuevoPaciente((java.awt.Frame) this.getParent(), true, dni)
-                    .setVisible(true);
+                new NuevoPaciente(null, true)
+                        .setVisible(true);
             }
         }
-    } // TODO add your handling code here:
     }//GEN-LAST:event_BotonBuscarPacienteActionPerformed
 
     private void BotonNuevoInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonNuevoInformeActionPerformed
         if (dniActual.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Primero busca un paciente.");
+            javax.swing.JOptionPane.showMessageDialog(null,
+                    "Primero busca un paciente.");
             return;
         }
-        new NuevoInformeEnfermeria((java.awt.Frame) this.getParent(), true, dniActual)
-            .setVisible(true);
-    // TODO add your handling code here:
+        new NuevoInformeEnfermeria(null, true)
+                .setVisible(true);
+        // TODO add your handling code here:
     }//GEN-LAST:event_BotonNuevoInformeActionPerformed
 
     private void BotonNuevaCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonNuevaCitaActionPerformed
-      if (dniActual.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Primero busca un paciente.");
+       if (CampoDni.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Primero busque un paciente.");
             return;
-        }
-        String nombreCompleto = CampoNombre.getText() + " " + CampoApellidos.getText();
-        new NuevaCitaEnfermeria((java.awt.Frame) this.getParent(), true,
-            dniActual, nombreCompleto).setVisible(true);
-      // TODO add your handling code here:
+        }        
+        NewCitaEnfermeria n = new NewCitaEnfermeria(null, true);
+        
+        n.setVisible(true);
     }//GEN-LAST:event_BotonNuevaCitaActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+     */
+
+        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(info.getName())) {
+                try {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+                    System.getLogger(NuevaConsultaEnfermeria.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                 }
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                NuevaConsultaEnfermeria dialog = new NuevaConsultaEnfermeria(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+    //</editor-fold>
+
+    /* Create and display the dialog */
+    java.awt.EventQueue.invokeLater(new Runnable() {
+        @Override
+        public void run() {
+            NuevaConsultaEnfermeria dialog = new NuevaConsultaEnfermeria(new javax.swing.JFrame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
+                }
+            });
+            dialog.setVisible(true);
+        }
+    });
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonActualizar;
@@ -386,30 +401,32 @@ public class NuevaConsultaEnfermeria extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private void cargarHistorial(String dni) {
-        DefaultTableModel modelo = new DefaultTableModel(
-            new String[]{"FECHA","MÁXIMA","MÍNIMA","GLUCOSA","PESO"}, 0) {
-            public boolean isCellEditable(int r, int c) { return false; }
-        };
-        Conexion.cargaTablaConsultasEnfermeria(modelo, dni);
-        Tabla.setModel(modelo);
-    }
+    DefaultTableModel modelo = new DefaultTableModel(
+            new String[]{"FECHA", "MÁXIMA", "MÍNIMA", "GLUCOSA", "PESO"}, 0) {
+        public boolean isCellEditable(int r, int c) {
+            return false;
+        }
+    };
+    Conexion.cargaTablaConsultasEnfermeria(modelo, dni);
+    Tabla.setModel(modelo);
+}
 
     private void TablaMouseClicked(java.awt.event.MouseEvent evt) {
-        if (evt.getClickCount() == 2) {
-            int fila = Tabla.getSelectedRow();
-            if (fila >= 0) {
-                String info =
-                    "FECHA: "   + Tabla.getValueAt(fila, 0) + "\n"
-                    + "MÁXIMA: "+ Tabla.getValueAt(fila, 1) + "\n"
-                    + "MÍNIMA: "+ Tabla.getValueAt(fila, 2) + "\n"
-                    + "GLUCOSA: "+ Tabla.getValueAt(fila, 3)+ "\n"
-                    + "PESO: "  + Tabla.getValueAt(fila, 4);
-                javax.swing.JOptionPane.showMessageDialog(this,
+    if (evt.getClickCount() == 2) {
+        int fila = Tabla.getSelectedRow();
+        if (fila >= 0) {
+            String info
+                    = "FECHA: " + Tabla.getValueAt(fila, 0) + "\n"
+                    + "MÁXIMA: " + Tabla.getValueAt(fila, 1) + "\n"
+                    + "MÍNIMA: " + Tabla.getValueAt(fila, 2) + "\n"
+                    + "GLUCOSA: " + Tabla.getValueAt(fila, 3) + "\n"
+                    + "PESO: " + Tabla.getValueAt(fila, 4);
+            javax.swing.JOptionPane.showMessageDialog(null,
                     info, "INFORME ENFERMERÍA",
                     javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            }
         }
-        
-        
     }
+
+    }
+}
 
